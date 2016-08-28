@@ -1,8 +1,13 @@
 "use strict";
 
 angular.module('conFusionApp', [])
-    .controller('menuController', function() {
-        var dishes = [{
+    .controller('MenuController', function($scope) {
+
+        $scope.tab = 1;
+        $scope.filtText = "";
+        $scope.showDetails = false;
+
+        $scope.dishes = [{
             name: 'Uthapizza',
             image: 'images/uthapizza.png',
             category: 'mains',
@@ -35,25 +40,26 @@ angular.module('conFusionApp', [])
             description: 'A delectable, semi-sweet New York Style Cheese Cake, with Graham cracker crust and spiced with Indian cardamoms',
             comment: ''
         }];
-        this.dishes = dishes;
-        this.tab = 1;
-        this.filtText = "";
 
-        this.isSelected = function(checkTab) {
-            return (this.tab === checkTab);
+        $scope.isSelected = function(checkTab) {
+            return ($scope.tab === checkTab);
         };
 
-        this.select = function(setTab) {
-            this.tab = setTab;
+        $scope.select = function(setTab) {
+            $scope.tab = setTab;
 
             if (setTab === 2) {
-                this.filtText = "appetizer";
+                $scope.filtText = "appetizer";
             } else if (setTab === 3) {
-                this.filtText = "mains";
+                $scope.filtText = "mains";
             } else if (setTab === 4) {
-                this.filtText = "dessert";
+                $scope.filtText = "dessert";
             } else {
-                this.filtText = "";
+                $scope.filtText = "";
             }
+        };
+
+        $scope.toggleDetails = function(){
+            $scope.showDetails = !$scope.showDetails;
         };
     });
