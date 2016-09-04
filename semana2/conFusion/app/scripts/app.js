@@ -109,7 +109,7 @@ angular.module('conFusionApp', [])
 })
 
 .controller('DishDetailController', function($scope) {
-    var dish = {
+    $scope.dish = {
         name: 'Uthapizza',
         image: 'images/uthapizza.png',
         category: 'mains',
@@ -143,29 +143,44 @@ angular.module('conFusionApp', [])
             date: "2011-12-02T17:57:28.556094Z"
         }]
     };
-    $scope.dish = dish;
+    //$scope.dish = dish;
 })
 
 .controller('DishCommentController', function($scope) {
     //Step 1: Create a JavaScript object to hold the comment from the form
-    $scope.comments = {
-        rating: "",
+    $scope.comment = {
+        rating: "5",
         comment: "",
         author: "",
         date: null
     };
 
+    $scope.commentTemp = function() {
+        if ($scope.comment.comment != "" && $scope.comment.comment != null) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
     $scope.submitComment = function() {
         //Step 2: This is how you record the date
         //"The date property of your JavaScript object holding the comment" = new Date().toISOString();
-        $scope.comments.date = new Date().toISOString();
-        console.log($scope.comments);
+        $scope.comment.date = new Date().toISOString();
+        console.log($scope.comment);
 
         // Step 3: Push your comment into the dish's comment array
-        $scope.dish.comments.push("Your JavaScript Object holding the comment");
+        $scope.dish.comments.push($scope.comment);
 
         //Step 4: reset your form to pristine
+        $scope.commentsForm.$setPristine();
 
         //Step 5: reset your JavaScript object that holds your comment
-    }
+        $scope.comment = {
+            rating: "5",
+            comment: "",
+            author: "",
+            date: null
+        };
+    };
 });
