@@ -76,9 +76,9 @@ angular.module('conFusionApp')
     };
 })
 
-.controller('DishDetailController', function($scope, $routeParams, menuFactory) {
+.controller('DishDetailController', function($scope, $stateParams, menuFactory) {
 
-    var param = parseInt($routeParams.id);
+    var param = parseInt($stateParams.id, 10);
     $scope.dish = menuFactory.getDish(param);
 
 })
