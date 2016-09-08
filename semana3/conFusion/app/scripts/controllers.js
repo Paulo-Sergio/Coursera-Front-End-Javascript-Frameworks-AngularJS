@@ -120,4 +120,28 @@ angular.module('conFusionApp')
             date: null
         };
     };
+})
+
+// implement the IndexController and About Controller here
+.controller('IndexController', function($scope, menuFactory, corporateFactory) {
+
+    $scope.feacturedPromotion = menuFactory.getPromotion(0);
+
+    $scope.leadership = corporateFactory.getLeader(3);
+
+    $scope.feacturedDish = menuFactory.getDish(0);
+
+    /** Trazer um dish aleatório **
+    $scope.feacturedDish = menuFactory.getDish(getRandom(menuFactory.getDishes().length));
+    function getRandom(max) {
+		return Math.floor(Math.random() * max);
+	}
+    */
+
+})
+
+.controller('AboutController', function($scope, corporateFactory) {
+
+    $scope.leaderships = corporateFactory.getLeaders();
+
 });
