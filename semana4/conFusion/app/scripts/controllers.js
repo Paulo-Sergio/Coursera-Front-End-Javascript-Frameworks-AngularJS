@@ -8,20 +8,17 @@ angular.module('conFusionApp')
         $scope.showDetails = false;
         $scope.showMenu = false;
         $scope.message = "Loading...";
-        $scope.dishes = {};
 
-        menuFactory.getDishes()
-            .then(
-                //success
-                function(response) {
-                    $scope.dishes = response.data;
-                    $scope.showMenu = true;
-                },
-                //error
-                function(response) {
-                    $scope.message = "Error: " + response.status + " " + response.statusText;
-                }
-            );
+        //[array] of dishes .query()
+        menuFactory.getDishes().query(
+            function(response) {
+                $scope.dishes = response;
+                $scope.showMenu = true;
+            },
+            function(response) {
+                $scope.message = "Error: " + response.status + " " + response.statusText;
+            }
+        );
 
         $scope.isSelected = function(checkTab) {
             return ($scope.tab === checkTab);
@@ -96,22 +93,22 @@ angular.module('conFusionApp')
     $scope.showDish = false;
     $scope.message = "Loading ...";
 
-    menuFactory.getDish(parseInt($stateParams.id, 10))
-        .then(
-            //success
-            function(response) {
-                $scope.dish = response.data;
-                $scope.showDish = true;
-            },
-            //error
-            function(response) {
-                $scope.message = "Error:" + response.status + " " + response.statusText;
-            }
-        );
+    //pegar um dish(:id) especifico .get
+    menuFactory.getDishes().get({
+        id: parseInt($stateParams.id)
+    }).$promise.then(
+        function(response) {
+            $scope.dish = response;
+            $scope.showDish = true;
+        },
+        function(response) {
+            $scope.message = "Error: " + response.status + " " + response.statusText;
+        }
+    );
 
 })
 
-.controller('DishCommentController', function($scope) {
+.controller('DishCommentController', function($scope, menuFactory) {
     //Step 1: Create a JavaScript object to hold the comment from the form
     $scope.comment = {
         rating: "5",
@@ -137,6 +134,11 @@ angular.module('conFusionApp')
         // Step 3: Push your comment into the dish's comment array
         $scope.dish.comments.push($scope.comment);
 
+        //update comment of dishes (o prato vai ficar atualizado com o novo comentario)
+        menuFactory.getDishes().update({
+            id: $scope.dish.id
+        }, $scope.dish);
+
         //Step 4: reset your form to pristine
         $scope.commentsForm.$setPristine();
 
@@ -155,21 +157,21 @@ angular.module('conFusionApp')
 
     $scope.leadership = corporateFactory.getLeader(3);
 
-    $scope.feacturedDish = {};
     $scope.showDish = false;
     $scope.message = "Loading ...";
-    menuFactory.getDish(0)
-        .then(
-            //success
-            function(response) {
-                $scope.feacturedDish = response.data;
-                $scope.showDish = true;
-            },
-            //error
-            function(response){
-                $scope.message = "Error:" + response.status + " " + response.statusText;
-            }
-        );
+
+    //pegar um dish(0) especifico .get
+    menuFactory.getDishes().get({
+        id: 0
+    }).$promise.then(
+        function(response) {
+            $scope.feacturedDish = response;
+            $scope.showDish = true;
+        },
+        function(response) {
+            $scope.message = "Error: " + response.status + " " + response.statusText;
+        }
+    );
 
     $scope.feacturedPromotion = menuFactory.getPromotion(0);
 

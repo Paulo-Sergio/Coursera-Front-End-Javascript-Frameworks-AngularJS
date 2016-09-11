@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('conFusionApp', ['ui.router'])
+angular.module('conFusionApp', ['ui.router', 'ngResource'])
     .config(function($stateProvider, $urlRouterProvider) {
         $stateProvider
         // route for the home page

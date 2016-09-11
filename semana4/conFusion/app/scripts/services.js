@@ -2,7 +2,7 @@
 
 angular.module('conFusionApp')
     .constant("baseURL", "http://localhost:3000/")
-    .service('menuFactory', function($http, baseURL) {
+    .service('menuFactory', function($http, baseURL, $resource) {
 
         var promotions = [{
             _id: 0,
@@ -14,11 +14,12 @@ angular.module('conFusionApp')
         }];
 
         this.getDishes = function() {
-            return $http.get(baseURL + "dishes");
-        };
-
-        this.getDish = function(index) {
-            return $http.get(baseURL + "dishes/" + index);
+            //return $http.get(baseURL + "dishes");
+            return $resource(baseURL + "dishees/:id", null, {
+                'update': {
+                    method: 'PUT'
+                }
+            });
         };
 
         // implement a function named getPromotion
