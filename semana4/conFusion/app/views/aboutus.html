@@ -53,7 +53,11 @@
     <div class="row row-content">
         <div class="col-xs-12 col-sm-9">
             <h2>Corporate Leadership</h2>
-            <ul class="media-list">
+            <!-- se caiu no callback de error -->
+            <div ng-if="!showLeaderships">
+                <h3>{{message}}</h3>
+            </div>
+            <ul class="media-list" ng-if="showLeaderships">
                 <li class="media" ng-repeat="leadership in leaderships">
                     <div class="media-left media-middle">
                         <a href="#">

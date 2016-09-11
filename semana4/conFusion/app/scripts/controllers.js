@@ -64,7 +64,7 @@ angular.module('conFusionApp')
     $scope.invalidChannelSelection = false;
 })
 
-.controller('FeedbackController', function($scope) {
+.controller('FeedbackController', function($scope, feedbackFactory) {
     $scope.sendFeedback = function() {
         console.log($scope.feedback);
 
@@ -73,6 +73,10 @@ angular.module('conFusionApp')
             console.log('incorret');
         } else {
             $scope.invalidChannelSelection = false;
+
+            //persistindo um feedback db.json
+            feedbackFactory.getFeedback().save($scope.feedback);
+
             $scope.feedback = {
                 mychannel: "",
                 firstName: "",
@@ -155,10 +159,23 @@ angular.module('conFusionApp')
 // implement the IndexController and About Controller here
 .controller('IndexController', function($scope, menuFactory, corporateFactory) {
 
-    $scope.leadership = corporateFactory.getLeader(3);
-
     $scope.showDish = false;
+    $scope.showPromotion = false;
+    $scope.showLeadership = false
     $scope.message = "Loading ...";
+
+    //$scope.leadership = corporateFactory.getLeader(3);
+    corporateFactory.getLeaders().get({
+        id: 3
+    }).$promise.then(
+        function(response) {
+            $scope.leadership = response;
+            $scope.showLeadership = true;
+        },
+        function(response) {
+            $scope.message = "Error: " + response.status + " " + response.statusText;
+        }
+    );
 
     //pegar um dish(0) especifico .get
     menuFactory.getDishes().get({
@@ -173,7 +190,18 @@ angular.module('conFusionApp')
         }
     );
 
-    $scope.feacturedPromotion = menuFactory.getPromotion(0);
+    //pegar um promotion(0) especifico .get
+    menuFactory.getPromotions().get({
+        id: 0
+    }).$promise.then(
+        function(response) {
+            $scope.feacturedPromotion = response;
+            $scope.showPromotion = true;
+        },
+        function(response) {
+            $scope.message = "Error:" + response.status + " " + response.statusText;
+        }
+    );
 
     /** Trazer um dish aleatório **
     $scope.feacturedDish = menuFactory.getDish(getRandom(menuFactory.getDishes().length));
@@ -186,6 +214,18 @@ angular.module('conFusionApp')
 
 .controller('AboutController', function($scope, corporateFactory) {
 
-    $scope.leaderships = corporateFactory.getLeaders();
+    $scope.showLeaderships = false;
+    $scope.message = "Loading...";
+
+    //[array] of Leaderships .query()
+    corporateFactory.getLeaders().query(
+        function(response) {
+            $scope.leaderships = response;
+            $scope.showLeaderships = true;
+        },
+        function(response) {
+            $scope.message = "Error: " + response.status + " " + response.statusText;
+        }
+    );
 
 });
