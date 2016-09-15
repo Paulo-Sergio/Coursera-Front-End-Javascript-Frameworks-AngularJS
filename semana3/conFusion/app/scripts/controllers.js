@@ -129,7 +129,16 @@ angular.module('conFusionApp')
 
     $scope.leadership = corporateFactory.getLeader(3);
 
-    $scope.feacturedDish = menuFactory.getDish(0);
+    $scope.feacturedDish = menuFactory.getDish(getFeactureDish());
+
+    function getFeactureDish() {
+        var dishes = menuFactory.getDishes();
+        for (var i = 0; i < dishes.length; i++){
+          if(dishes[i].label === "Hot")
+            return i;
+        }
+        return 3;
+    }
 
     /** Trazer um dish aleatório **
     $scope.feacturedDish = menuFactory.getDish(getRandom(menuFactory.getDishes().length));
